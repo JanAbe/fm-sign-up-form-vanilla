@@ -13,149 +13,110 @@ const emailRequiredError = document.querySelector("#emailRequiredError");
 const emailInvalidError = document.querySelector("#emailInvalidError");
 const passwordRequiredError = document.querySelector("#passwordRequiredError");
 
-const DONT_SHOW_ERROR_CLASS = "sr-only";
-const BACKGROUND_ERROR_IMAGE_CLASS = "bg-error";
-const ERROR_CLASS = "error";
-const DEFAULT_INPUT_BORDER = "input-border";
+const emailRegex = new RegExp("^[^@]+@[^@]+\\.[^@]+$");
 
-const emailRegex = new RegExp("^[^@]+@[^@]+.[^@]+$");
+const errorMessages = {
+  "firstNameRequiredError": "First Name cannot be empty",
+  "lastNameRequiredError": "Last Name cannot be empty",
+  "emailRequiredError": "Email cannot be empty",
+  "emailInvalidError": "Looks like this is not an email",
+  "passwordRequiredError": "Password cannot be empty"
+}
 
-const addFirstNameErrorClasses = () => {
-  firstNameRequiredError.classList.remove(DONT_SHOW_ERROR_CLASS);
-  firstNameInput.classList.add(BACKGROUND_ERROR_IMAGE_CLASS);
-  firstNameInput.classList.remove(DEFAULT_INPUT_BORDER);
-  firstNameInput.classList.add(ERROR_CLASS);
-};
-
-const resetFirstNameInput = () => {
-  firstNameRequiredError.classList.add(DONT_SHOW_ERROR_CLASS);
-  firstNameInput.classList.remove(BACKGROUND_ERROR_IMAGE_CLASS);
-  firstNameInput.classList.add(DEFAULT_INPUT_BORDER);
-};
-
-const addLastNameErrorClasses = () => {
-  lastNameRequiredError.classList.remove(DONT_SHOW_ERROR_CLASS);
-  lastNameInput.classList.add(BACKGROUND_ERROR_IMAGE_CLASS);
-  lastNameInput.classList.remove(DEFAULT_INPUT_BORDER);
-  lastNameInput.classList.add(ERROR_CLASS);
-};
-
-const resetLastNameInput = () => {
-  lastNameRequiredError.classList.add(DONT_SHOW_ERROR_CLASS);
-  lastNameInput.classList.remove(BACKGROUND_ERROR_IMAGE_CLASS);
-  lastNameInput.classList.add(DEFAULT_INPUT_BORDER);
-};
-
-const addEmailErrorClasses = () => {
-  emailInput.classList.add(BACKGROUND_ERROR_IMAGE_CLASS);
-  emailInput.classList.remove(DEFAULT_INPUT_BORDER);
-  emailInput.classList.add(ERROR_CLASS);
-};
-
-const resetEmailInput = () => {
-  emailRequiredError.classList.add(DONT_SHOW_ERROR_CLASS);
-  emailInvalidError.classList.add(DONT_SHOW_ERROR_CLASS);
-  emailInput.classList.remove(BACKGROUND_ERROR_IMAGE_CLASS);
-  emailInput.classList.add(DEFAULT_INPUT_BORDER);
-};
-
-const addPasswordErrorClasses = () => {
-  passwordRequiredError.classList.remove(DONT_SHOW_ERROR_CLASS);
-  passwordInput.classList.add(BACKGROUND_ERROR_IMAGE_CLASS);
-  passwordInput.classList.remove(DEFAULT_INPUT_BORDER);
-  passwordInput.classList.add(ERROR_CLASS);
-};
-
-const resetPasswordInput = () => {
-  passwordRequiredError.classList.add(DONT_SHOW_ERROR_CLASS);
-  passwordInput.classList.remove(BACKGROUND_ERROR_IMAGE_CLASS);
-  passwordInput.classList.add(DEFAULT_INPUT_BORDER);
+/**
+ * Adds the error css-class to the inputElement and shows error text
+ * @param inputElement input element to add error classes to
+ * @param correspondingError the error field that belongs to the provided input element
+ * @param errorMessage the message to show
+ */
+const addError = (inputElement, correspondingError, errorMessage) => {
+  inputElement.classList.add("error");
+  correspondingError.textContent = errorMessage;
+  correspondingError.classList.remove("sr-only");
 };
 
 /**
- * Reset input fields to non-error state.
+ * Removes error css-classes from the inputElement and hides error text
+ * @param inputElement input element to remove error classes from
+ * @param correspondingError the error field that belongs to the provided input element
  */
-const resetFields = () => {
-  resetFirstNameInput();
-  resetLastNameInput();
-  resetEmailInput();
-  resetPasswordInput();
+const removeError = (inputElement, correspondingError) => {
+  inputElement.classList.remove("error");
+  correspondingError.textContent = "";
+  correspondingError.classList.add("sr-only");
 };
+
+/**
+ * Adds on change validation to the provided inputElement.
+ * It runs the provided validationFn on each keystroke.
+ * If the validationFn returns true -> show the error.
+ * Else -> hide error.
+ * @param inputElement the input element to which the event listener needs to be added.
+ * @param correspondingError the error that belongs to the provided input
+ * @param errorMessage the message to show
+ * @param validationFn the validation function. If returns true -> error class is shown else -> error class removed
+ */
+const addOnChangeValidation = (inputElement, correspondingError, errorMessage, validationFn) => {
+  inputElement.addEventListener("input", (event) => {
+    if (validationFn(event.target.value)) {
+      addError(inputElement, correspondingError, errorMessage);
+    } else {
+      removeError(inputElement, correspondingError);
+    }
+  });
+}
 
 const validateInput = () => {
   let valid = true;
+
   if (firstNameInput.validity.valueMissing) {
-    addFirstNameErrorClasses();
+    addError(
+      firstNameInput,
+      firstNameRequiredError,
+      errorMessages.firstNameRequiredError
+    );
     valid = false;
   }
 
   if (lastNameInput.validity.valueMissing) {
-    addLastNameErrorClasses();
+    addError(lastNameInput, lastNameRequiredError, errorMessages.lastNameRequiredError);
     valid = false;
   }
 
   if (emailInput.validity.valueMissing) {
-    emailRequiredError.classList.remove(DONT_SHOW_ERROR_CLASS);
-    addEmailErrorClasses();
+    addError(emailInput, emailRequiredError, errorMessages.emailRequiredError);
     valid = false;
   }
 
   if (emailInput.validity.patternMismatch) {
-    emailInvalidError.classList.remove(DONT_SHOW_ERROR_CLASS);
-    addEmailErrorClasses();
+    addError(emailInput, emailInvalidError, errorMessages.emailInvalidError);
     valid = false;
   }
 
   if (passwordInput.validity.valueMissing) {
-    addPasswordErrorClasses();
+    addError(passwordInput, passwordRequiredError, errorMessages.passwordRequiredError);
     valid = false;
   }
 
   return valid;
 };
 
-firstNameInput.addEventListener("input", (event) => {
-  const providedFirstName = event.target.value;
-  if (providedFirstName) {
-    resetFirstNameInput();
-  } else {
-    addFirstNameErrorClasses();
-  }
-});
+const resetFields = () => {
+  removeError(firstNameInput, firstNameRequiredError);
+  removeError(lastNameInput, lastNameRequiredError);
+  removeError(emailInput, emailRequiredError);
+  removeError(emailInput, emailInvalidError);
+  removeError(passwordInput, passwordRequiredError);
+};
 
-lastNameInput.addEventListener("input", (event) => {
-  const providedLastName = event.target.value;
-  if (providedLastName) {
-    resetLastNameInput();
-  } else {
-    addLastNameErrorClasses();
-  }
-});
+const isEmpty = (value) => value === "";
+const isInvalidEmail = (value) => !emailRegex.test(value);
 
-emailInput.addEventListener("input", (event) => {
-  const providedEmail = event.target.value;
-  const isValidEmail = emailRegex.test(providedEmail);
-  if (providedEmail) {
-    resetEmailInput();
-    if (!isValidEmail) {
-      emailInvalidError.classList.remove(DONT_SHOW_ERROR_CLASS);
-      addEmailErrorClasses();
-    }
-  } else {
-    emailRequiredError.classList.remove(DONT_SHOW_ERROR_CLASS);
-    emailInvalidError.classList.add(DONT_SHOW_ERROR_CLASS);
-    addEmailErrorClasses();
-  }
-});
-
-passwordInput.addEventListener("input", (event) => {
-  const providedPassword = event.target.value;
-  if (providedPassword) {
-    resetPasswordInput();
-  } else {
-    addPasswordErrorClasses();
-  }
-});
+addOnChangeValidation(firstNameInput, firstNameRequiredError, errorMessages.firstNameRequiredError, isEmpty);
+addOnChangeValidation(lastNameInput, lastNameRequiredError, errorMessages.lastNameRequiredError, isEmpty);
+addOnChangeValidation(emailInput, emailRequiredError, errorMessages.emailRequiredError, isEmpty);
+addOnChangeValidation(emailInput, emailInvalidError, errorMessages.emailInvalidError, isInvalidEmail);
+addOnChangeValidation(passwordInput, passwordRequiredError, errorMessages.passwordRequiredError, isEmpty);
 
 registrationForm.addEventListener("submit", (event) => {
   resetFields();

@@ -119,10 +119,7 @@ button:hover {
 }
 
 .error {
-  border: 1px solid var(--red);
-}
-
-.bg-error {
+  border: 1px solid var(--red) !important;
   background-image: url("images/icon-error.svg");
   background-position: right 10px top 15px;
   background-repeat: no-repeat;
