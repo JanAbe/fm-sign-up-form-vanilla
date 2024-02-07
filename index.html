@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <script defer src="index.js"></script>
+
+    <title>Frontend Mentor | Intro component with sign up form</title>
+
+    <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+    <style>
+      .attribution {
+        font-size: 11px;
+        text-align: center;
+      }
+      .attribution a {
+        color: hsl(228, 45%, 44%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="root">
+      <main class="container">
+        <section class="intro-section">
+          <h1 class="title">Learn to code by watching others</h1>
+
+          <p class="description">
+            See how experienced developers solve problems in real-time. Watching
+            scripted tutorials is great, but understanding how developers think
+            is invaluable.
+          </p>
+        </section>
+
+        <section class="form-section">
+          <div class="banner shadow">
+            <span> <strong>Try it free 7 days</strong> then </span>
+            <span>$20/mo. thereafter</span>
+          </div>
+
+          <form class="form shadow" novalidate>
+            <div>
+              <label for="firstNameInput" class="sr-only">First Name</label>
+              <input
+                id="firstNameInput"
+                name="firstName"
+                class="input input-border"
+                placeholder="First Name"
+                required
+                aria-describedby="firstNameRequiredError"
+              />
+              <div class="validation-message-wrapper">
+                <p
+                  id="firstNameRequiredError"
+                  class="validation-message sr-only"
+                  aria-live="polite"
+                >
+                  First Name cannot be empty
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="lastNameInput" class="sr-only">Last Name</label>
+              <input
+                id="lastNameInput"
+                name="lastName"
+                class="input input-border"
+                placeholder="Last Name"
+                required
+                aria-describedby="lastNameRequiredError"
+              />
+              <div class="validation-message-wrapper">
+                <p
+                  id="lastNameRequiredError"
+                  class="validation-message sr-only"
+                  aria-live="polite"
+                >
+                  Last Name cannot be empty
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="emailInput" class="sr-only">Email Address</label>
+              <input
+                id="emailInput"
+                name="email"
+                class="input input-border"
+                placeholder="Email Address"
+                type="email"
+                required
+                pattern="^[^@]+@[^@]+\.[^@]+$"
+                aria-describedby="emailRequiredError emailInvalidError"
+              />
+              <div class="validation-message-wrapper">
+                <p id="emailRequiredError" class="validation-message sr-only" aria-live="polite">
+                  Email Address cannot be empty
+                </p>
+                <p id="emailInvalidError" class="validation-message sr-only" aria-live="polite" >
+                  Looks like this is not an email
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="passwordInput" class="sr-only">Password</label>
+              <input
+                id="passwordInput"
+                name="password"
+                class="input input-border"
+                placeholder="Password"
+                type="password"
+                required
+                aria-describedby="passwordRequiredError"
+              />
+              <div class="validation-message-wrapper">
+                <p
+                  id="passwordRequiredError"
+                  class="validation-message sr-only"
+                  aria-live="polite"
+                >
+                  Password cannot be empty
+                </p>
+              </div>
+            </div>
+
+            <button class="free-trial-button" aria-describedby="tos">Claim your free trial</button>
+
+            <p id="tos" class="tos">
+              By clicking the button, you are agreeing to our
+              <a class="tos-link" href="#"> Terms and Services </a>
+            </p>
+          </form>
+        </section>
+      </main>
+
+      <footer>
+        <p class="attribution">
+          Challenge by
+          <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">
+            Frontend Mentor
+          </a>
+          . Coded by <a href="#">Your Name Here</a>.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
